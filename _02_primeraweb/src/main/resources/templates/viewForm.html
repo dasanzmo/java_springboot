@@ -18,17 +18,20 @@
       <input type="hidden" th:field="*{id}" th:value="${coder.id}">
 
       <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="name" placeholder="Nombre Coder" th:field="*{name}" th:value="${coder.name}" />
+        <input type="text" class="form-control" id="name" placeholder="Nombre Coder" th:field="*{name}"
+          th:value="${coder.name}" />
         <label for="name">Nombre</label>
       </div>
 
       <div class="form-floating mb-3">
-        <input type="number" class="form-control" id="edad" placeholder="Edad" th:field="*{age}" th:value="${coder.age}" />
+        <input type="number" class="form-control" id="edad" placeholder="Edad" th:field="*{age}"
+          th:value="${coder.age}" />
         <label for="edad">Edad Coder</label>
       </div>
 
       <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="clan" placeholder="clan" th:field="*{clan}" th:value="${coder.clan}" />
+        <input type="text" class="form-control" id="clan" placeholder="clan" th:field="*{clan}"
+          th:value="${coder.clan}" />
         <label for="clan">Clan Coder</label>
       </div>
       <!-- LINK th:href="@{/estilos/styles.css}" -->

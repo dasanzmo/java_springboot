@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.riwi.primeraweb.entity.Coder;
 
 @Repository
-public interface CoderRepository extends JpaRepository<Coder,Long>{
-
-
+public interface CoderRepository extends JpaRepository<Coder, Long> {
 
 }

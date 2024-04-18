@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @Table(name = "coder")
 
 public class Coder {
-    // Id indica que el aatributo siguiente será la llave primaria 
+    // Id indica que el aatributo siguiente será la llave primaria
     @Id
     // GeneratedValue permite que el id será autoincrementable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Coder {
     private int age;
     private String clan;
 
-    public Coder(){
+    public Coder() {
 
     }
 
@@ -64,12 +64,9 @@ public class Coder {
         this.clan = clan;
     }
 
-
     @Override
     public String toString() {
         return "Coder [id=" + id + ", name=" + name + ", age=" + age + ", clan=" + clan + "]";
     }
-
-    
 
 }
