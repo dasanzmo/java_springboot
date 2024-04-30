@@ -11,5 +11,5 @@ public interface CrudService<RQ, RS, ID> {
 
     void delete(ID id);
 
-    RS getByID(ID id);
+    RS getById(ID id);
 }

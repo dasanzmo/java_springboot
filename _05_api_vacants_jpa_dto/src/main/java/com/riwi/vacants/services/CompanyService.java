@@ -21,67 +21,86 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CompanyService implements ICompanyService{
+public class CompanyService implements ICompanyService {
 
     @Autowired
     private final CompanyRepository companyRepository;
 
     @Override
-    public CompanyResponse create(CompanyRequest request) {
-
-        //Convertimos el request en la entidad
-        Company company = this.requestToEntity(request, new Company());
-        // Agregamos la entidad en el repositorio y el retorno lo convertimos en respuesta
-        return this.entityToReponse(this.companyRepository.save(company));
-    }
-
-    @Override
-    public void delete(String id) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public Page<CompanyResponse> getAll(int page, int size) {
-        // Configuramos la paginación
-        if(page < 0 )
+        /** 1. Configuramos la paginación */
+        if (page < 0)
             page = 0;
         PageRequest pagination = PageRequest.of(page, size);
+        // *LLamamos el repositorio */
+        // return this.companyRepository.findAll(pagination)
+        // .map(company -> this.entityToResponse(company));
 
-        // LLamamos el repsitorio
-        return this.companyRepository.findAll(pagination).map(company -> this.entityToReponse(company));
-        // También puede ser (this::entityResponse)
+        return this.companyRepository.findAll(pagination)
+                .map(this::entityToResponse);
     }
 
     @Override
-    public CompanyResponse getByID(String id) {
-        Company company = this.find(id);
-        // Buscamos la compañía con el id
-        return this.entityToReponse(company);
+    public CompanyResponse create(CompanyRequest request) {
+        /** Convertimos el Request en la entidad */
+        Company company = this.requestToEntity(request, new Company());
+        /**
+         * Agregamos la entidad en el repositorio y el retorno lo convertimos
+         * en respuesta
+         */
+        return this.entityToResponse(this.companyRepository.save(company));
     }
 
     @Override
     public CompanyResponse update(CompanyRequest request, String id) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
-    private CompanyResponse entityToReponse(Company entity){
-        CompanyResponse response = new CompanyResponse();
+    @Override
+    public void delete(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
 
-        // BeanUtils nos permite hacer una copia de una clase en otra, en este caso toda la entidad de tipo Company será copiada con
-        // la información requerida por la variable tipo Company Response
+    @Override
+    public CompanyResponse getById(String id) {
+        // Buscamos la compañia con el id
+        Company company = this.find(id);
+
+        // Convertimos la entidad al dto de respuesta y lo retornamos
+        return this.entityToResponse(company);
+    }
+
+    /**
+     * Este método se encargará de convertir una entidad en el dto de respuesta
+     * de la entidad
+     */
+    private CompanyResponse entityToResponse(Company entity) {
+
+        CompanyResponse response = new CompanyResponse();
+        /**
+         * Bean Utils nos permite hacer un copia de una clase en otra
+         * En este caso toda la entidad de tipo Company sera copiada con la información
+         * requerida por la variable tipo CompanyResponse
+         */
+
         BeanUtils.copyProperties(entity, response);
 
+        /**
+         * stream -> Convierte la lista en colección para poder iterarse
+         * map -> Itera toda la lista y retorna cambios
+         * collect -> Crea de nuevo toda la lista que se habia transformado en coleccion
+         */
+        response.setVacants(entity.getVacants().stream()
+                .map(this::vacantToResponse)
+                .collect(Collectors.toList()));
 
-        //Stream -> Convierte la lista en colección para poder iterarse
-        // Map -> Itera toda a lista y retorna cambios
-        // Collect -> Crea de nuevo toda la lista que se había transformado en 
-        response.setVacants(entity.getVacants().stream().map(this::vacantToResponse).collect(Collectors.toList()));
         return response;
+
     }
 
-    private VacantToCompanyResponse vacantToResponse(Vacant entity){
+    private VacantToCompanyResponse vacantToResponse(Vacant entity) {
         VacantToCompanyResponse response = new VacantToCompanyResponse();
 
         BeanUtils.copyProperties(entity, response);
@@ -89,17 +108,16 @@ public class CompanyService implements ICompanyService{
         return response;
     }
 
-    private Company requestToEntity(CompanyRequest request, Company company){
+    private Company requestToEntity(CompanyRequest request, Company company) {
         company.setContact(request.getContact());
-        company.setName(request.getName());
         company.setLocation(request.getLocation());
+        company.setName(request.getName());
         company.setVacants(new ArrayList<>());
-
         return company;
     }
 
-    private Company find(String id){
+    private Company find(String id) {
         return this.companyRepository.findById(id).orElseThrow();
     }
-    
+
 }
