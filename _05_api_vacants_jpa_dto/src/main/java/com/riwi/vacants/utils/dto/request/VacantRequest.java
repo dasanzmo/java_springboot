@@ -1,7 +1,5 @@
 package com.riwi.vacants.utils.dto.request;
 
-import org.springframework.validation.annotation.Validated;
-
 import com.riwi.vacants.utils.enums.StatusVacant;
 
 import jakarta.validation.constraints.NotBlank;
